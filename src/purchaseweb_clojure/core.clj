@@ -6,7 +6,6 @@
   (:gen-class))
 
 (defn read-category []
-  (println "Type in a category (Furniture, Alcohol, Toiletries, Shoes, Food, Jewelry):")
   (let [purchases (slurp "purchases.csv")
         purchases (str/split-lines purchases)
         purchases (map (fn [line]
@@ -28,13 +27,29 @@
                       purchases))]
     [:ol
      (map (fn [purchases]
-            [:li (str (get purchases  "category") ": " (get purchases "credit_card") ", [" (get purchases "cvv") "], " (get purchases "date"))])
+            [:li (str 
+                   (get purchases "credit_card") " [" 
+                   (get purchases "cvv") "] : " 
+                   (get purchases "date"))])
        purchases)]))
 
 (c/defroutes app
   (c/GET "/:category{.*}" [category]
     (h/html [:html
-             [:body
+             [:body 
+              [:a {:href "/"} "Full Listing"]
+              " : "
+              [:a {:href "/Alcohol"} "Alcohol"]
+              " | "
+              [:a {:href "/Food"} "Food"]
+              " | "
+              [:a {:href "/Furniture"} "Furniture"]
+              " | "
+              [:a {:href "/Jewelry"} "Jewelry"]
+              " | "
+              [:a {:href "/Shoes"} "Shoes"]
+              " | "
+              [:a {:href "/Toiletries"} "Toiletries"]
               (purchaseweb-html category)]])))
 
 (defonce server (atom nil))
